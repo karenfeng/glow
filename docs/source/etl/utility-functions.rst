@@ -5,7 +5,7 @@ Utility Functions
 .. testsetup::
 
     from pyspark.sql import SparkSession
-    spark = SparkSession.builder.appName("glow-docs").master("local").config('spark.jars.packages', 'io.projectglow:glow_2.11:0.1.2').getOrCreate()
+    spark = SparkSession.builder.config('spark.jars.packages', 'io.projectglow:glow_2.11:0.1.2').getOrCreate()
 
     import glow
     glow.register(spark)
@@ -38,17 +38,15 @@ whose parameter structs require a certain schema.
 
 - ``add_struct_fields``: append fields to a struct
 
-.. doctest::
+.. code-block:: py
 
-    >>> base_df.selectExpr("add_struct_fields(base_col, 'float_col', 3.14, 'rev_str_col', reverse(base_col.str_col)) as added_col").show()
-    DataFrame[added_col: struct<bool_col:boolean,int_col:bigint,str_col:string,float_col:decimal(3,2),rev_str_col:string>]
+    base_df.selectExpr("add_struct_fields(base_col, 'float_col', 3.14, 'rev_str_col', reverse(base_col.str_col)) as added_col")
 
 - ``expand_struct``: explode a struct into columns
 
-.. doctest::
+.. code-block:: py
 
-    >>> base_df.selectExpr("expand_struct(base_col)")
-    DataFrame[bool_col: boolean, int_col: bigint, str_col: string]
+    base_df.selectExpr("expand_struct(base_col)")
 
 
 Spark ML transformations
