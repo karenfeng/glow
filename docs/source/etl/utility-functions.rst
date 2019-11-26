@@ -2,6 +2,13 @@
 Utility Functions
 =================
 
+.. testsetup::
+
+    import glow
+    from pyspark.sql import SparkSession
+    spark = SparkSession.builder.master("local").appName("glow-docs").getOrCreate()
+    glow.register(spark)
+
 Glow includes a variety of utility functions for performing basic data manipulation.
 
 Struct transformations
@@ -12,17 +19,21 @@ whose parameter structs require a certain schema.
 
 - ``subset_struct``: subset fields from a struct
 
-.. code-block:: py
+.. doctest::
 
-    from pyspark.sql import Row
-    row_one = Row(Row(str_col='foo', int_col=1, bool_col=True))
-    row_two = Row(Row(str_col='bar', int_col=2, bool_col=False))
-    base_df = spark.createDataFrame([row_one, row_two], schema=['base_col'])
-    base_df.selectExpr("subset_struct(base_col, 'str_col', 'bool_col') as subsetted_col")
+    >>> from pyspark.sql import Row
+    >>> row_one = Row(Row(str_col='foo', int_col=1, bool_col=True))
+    >>> row_two = Row(Row(str_col='bar', int_col=2, bool_col=False))
+    >>> base_df = spark.createDataFrame([row_one, row_two], schema=['base_col'])
+    >>> base_df.selectExpr("subset_struct(base_col, 'str_col', 'bool_col') as subsetted_col")
+
+.. testoutput::
+
+    hello
 
 - ``add_struct_fields``: append fields to a struct
 
-.. code-block:: py
+.. testcode::
 
     base_df.selectExpr("add_struct_fields(base_col, 'float_col', 3.14, 'rev_str_col', \
         reverse(base_col.str_col)) as added_col")
